@@ -1,0 +1,27 @@
+{
+  "name": "pi-beb",
+  "version": "0.1.0",
+  "description": "beb mail as an event-driven wake for the pi coding agent",
+  "license": "MIT",
+  "author": "Yanuar Aristya Edy Putra",
+  "homepage": "https://getbeb.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getbeb/pi-beb.git"
+  },
+  "keywords": [
+    "pi",
+    "pi-agent",
+    "pi-extension",
+    "beb",
+    "agent-messaging"
+  ],
+  "pi": {
+    "extensions": [
+      "./src/index.ts"
+    ]
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.84.0"
+  }
+}

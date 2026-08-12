@@ -52,8 +52,13 @@ pi-beb adds no verbs and no tools. It never consumes mail either: the
 cursor moves only when the agent runs `beb read` itself, so anything
 pi ignores is still waiting later.
 
-In a directory without a `.beb`, the extension loads to silence and
-holds nothing open.
+If `beb whoami` cannot resolve an identity, the extension loads to
+silence and holds nothing open.
+
+For interactive use, running pi from the identity directory is
+enough. For long-lived agent sessions that change working directory,
+set `BEB_IDENTITY` when starting pi: it pins identity to the process
+tree while the cwd wanders freely.
 
 ## How it works
 

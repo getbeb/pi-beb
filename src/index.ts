@@ -28,12 +28,20 @@ import { execFile, spawn, type ChildProcess } from "node:child_process";
  * however long the agent takes. beb prints the next mark on stdout on
  * arrival and on timeout alike, so the mark survives a leg boundary.
  *
- * Identity is BEB_IDENTITY, pinned once at session_start to pi's own
- * declaration or else the directory the session opened in, and named on
- * every call after. beb has read nothing else since 0.6.0, and pinning
- * is what keeps a session that wanders between subdirectories signing
- * as whoever it began as. Where beb resolves nobody, pi-beb loads to
- * silence.
+ * Identity is BEB_IDENTITY, resolved once at session_start to pi's own
+ * declaration or else the directory the session opened in. beb has read
+ * nothing else since 0.6.0, and pinning is what keeps a session that
+ * wanders between subdirectories signing as whoever it began as. Where
+ * beb resolves nobody, pi-beb loads to silence.
+ *
+ * The pin goes on `process.env`, not just on the children pi-beb
+ * spawns, because the agent runs beb too. pi builds every shell
+ * environment by spreading `process.env` at spawn time, so one
+ * assignment reaches the agent's own `beb read` and the user's `!beb
+ * list` alike. Without it the extension knew who it was and the agent
+ * it woke did not: `beb whoami` in the session answered "BEB_IDENTITY
+ * is not set, so there is no identity to sign as", which is a strange
+ * thing to be told by a session that was just handed mail.
  */
 export default function (pi: ExtensionAPI) {
   let child: ChildProcess | null = null;
@@ -127,6 +135,12 @@ export default function (pi: ExtensionAPI) {
     identity = process.env.BEB_IDENTITY || ctx.cwd;
     const who = await beb(["whoami"]);
     if (!who) return;
+
+    // Only once beb has answered. Pinning a directory beb refuses would
+    // replace its "BEB_IDENTITY is not set" -- which names `beb init` --
+    // with a complaint about a directory nobody chose, and pi-beb's
+    // rule is that resolving nobody means holding nothing.
+    process.env.BEB_IDENTITY = identity;
 
     stopping = false;
     mark = await armMark();

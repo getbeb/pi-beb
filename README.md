@@ -15,9 +15,9 @@ derailed by someone else's message.
 pi install git:github.com/getbeb/pi-beb
 ```
 
-beb itself must be on PATH, version 0.3.0 or newer (`wait` is what
-the extension parks on; `BEB_IDENTITY` is how a cd-less pi gets an
-identity):
+beb itself must be on PATH, version 0.6.0 or newer (`wait --from` is
+what the extension parks on, and `BEB_IDENTITY` is the only identity
+beb reads):
 
 ```sh
 curl -fsSL https://getbeb.dev/install.sh | sh

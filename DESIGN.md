@@ -37,10 +37,22 @@ deserves an agent turn.
 4. pi-beb holds no state: no files, no cursor, no config. Everything
    it knows it learns from beb at the moment it looks.
 5. No identity, no activity. pi-beb stands as whatever identity beb
-   resolves for pi's process — the working directory's `.beb`, or
-   `BEB_IDENTITY` in pi's environment; the resolution is beb's,
-   never pi-beb's. Where beb resolves nobody, pi-beb loads to
-   silence.
+   resolves for pi's process, which since beb 0.6.0 means
+   `BEB_IDENTITY` and nothing else. pi-beb resolves it once at
+   session start — pi's own declaration, or else the directory the
+   session opened in — and pins it. Where beb resolves nobody,
+   pi-beb loads to silence, and pins nothing.
+
+   The pin goes on `process.env`, not only on the children pi-beb
+   spawns, because the agent runs beb too and it is the agent that
+   was told to run `beb read`. pi builds every shell environment by
+   spreading `process.env` at spawn time, so one assignment covers
+   the extension, the agent's bash tool, and the user's `!beb list`
+   alike. Without it a session could be handed mail and then be told
+   `BEB_IDENTITY is not set, so there is no identity to sign as` by
+   the very tool that woke it. That assumption about pi's internals
+   is the one thing here worth a test, and `tests/pin.mjs` checks it
+   against pi's real bash backend.
 
 ## Behavior
 

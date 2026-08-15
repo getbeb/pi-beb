@@ -29,7 +29,7 @@ Run pi as a beb identity — the directory's, or one named in the
 environment:
 
 ```sh
-cd ~/work/backend    # has .beb, from beb init
+cd ~/work/backend    # has .beb, from beb init backend
 pi
 
 # or, for a pi launched where cd is not available:

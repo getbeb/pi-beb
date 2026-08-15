@@ -1,6 +1,6 @@
 {
   "name": "pi-beb",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "beb mail as an event-driven wake for the pi coding agent",
   "license": "MIT",
   "author": "Yanuar Aristya Edy Putra",

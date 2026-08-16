@@ -12,7 +12,7 @@ unset BEB_IDENTITY
 
 have=$("$BEB" --version 2>/dev/null | awk '{print $2}')
 [ -n "$have" ] || { echo "not ok - no beb on PATH or in BEB_BIN"; exit 1; }
-gate=0.8.0
+gate=0.9.0
 older=$(printf '%s\n%s\n' "$gate" "$have" | sort -t. -k1,1n -k2,2n -k3,3n | head -n 1)
 if [ "$have" != "$gate" ] && [ "$older" = "$have" ]; then
     echo "not ok - beb $have is older than $gate (identity, wait --from)"

@@ -12,7 +12,8 @@ import { createLocalBashOperations } from "@earendil-works/pi-coding-agent";
 
 const dir = process.argv[2];
 const ops = createLocalBashOperations();
-let n = 0;
+// Numbered from where the shell half left off, so the suite counts once.
+let n = Number(process.env.PI_BEB_TEST_BASE || 0);
 const ok = (m) => console.log(`ok ${++n} - ${m}`);
 const die = (m) => {
   console.log(`not ok - ${m}`);
@@ -38,5 +39,3 @@ const after = await whoami();
 if (after.exitCode !== 0) die(`the pin did not reach the shell: ${after.out}`);
 if (!after.out.startsWith("ssh-ed25519 ")) die(`no address on stdout: ${after.out}`);
 ok("assigning process.env pins the identity for pi's own bash backend");
-
-console.log(`all ${n} tests passed`);

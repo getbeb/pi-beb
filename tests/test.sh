@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Tests for pi-beb. Needs beb 0.6.0+ on PATH or in BEB_BIN, and the dev
-# dependency installed (npm install) for pi's own bash backend.
+# Tests for pi-beb, in two halves: what it assumes beb does (wake.sh,
+# shell), and what it assumes pi does (pin.mjs, against pi's real bash
+# backend). Needs beb on PATH or in BEB_BIN, and npm install for the
+# second half.
 # Run: bash tests/test.sh
 set -u
 
@@ -30,4 +32,18 @@ export XDG_CONFIG_HOME=$S/config XDG_DATA_HOME=$S/data
 mkdir -p "$S/config/beb" "$S/id"
 (cd "$S/id" && "$BEB" init pinid >/dev/null 2>&1) || { echo "not ok - init"; exit 1; }
 
-cd "$HERE" && node tests/pin.mjs "$S/id"
+# One counter across both halves, and one total at the end. Two scripts
+# each announcing their own total is how a suite comes to report fewer
+# tests than it printed.
+n=0
+ok() { n=$((n + 1)); echo "ok $n - $1"; }
+die() { echo "not ok - $1"; exit 1; }
+
+# What pi-beb assumes beb does, checked against the beb on PATH.
+. "$HERE/tests/wake.sh"
+
+# What pi-beb assumes pi does, checked against pi's real bash backend.
+cd "$HERE" && PI_BEB_TEST_BASE=$n node tests/pin.mjs "$S/id" || exit 1
+n=$((n + 2))
+
+echo "all $n tests passed"

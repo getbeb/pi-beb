@@ -53,7 +53,7 @@ ok "mail standing wakes the park at once, and prints the mark to park from next"
 #
 # pi-beb embeds `list` verbatim in the message it sends the agent, so the
 # rows have to be on stdout and the prose has to not be.
-rows=$(recv list 2>/dev/null)
+rows=$(recv list --unread --limit 10 2>/dev/null)
 test -n "$rows" || die "list said nothing on stdout with mail standing"
 echo "$rows" | grep -q 'hello' || die "the subject is not in the rows: $rows"
 echo "$rows" | grep -q '^beb:' && die "prose reached stdout, and would reach the agent"
@@ -61,7 +61,7 @@ ok "list puts the rows on stdout, so the wake can carry them as they are"
 
 # --- never consuming ----------------------------------------------------
 
-again=$(recv list 2>/dev/null)
+again=$(recv list --unread --limit 10 2>/dev/null)
 test "$rows" = "$again" || die "list moved something; pi-beb would wake once and go quiet"
 ok "list moves nothing, so the same mail is still there for the agent to read"
 

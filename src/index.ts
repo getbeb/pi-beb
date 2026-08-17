@@ -75,7 +75,7 @@ export default function (pi: ExtensionAPI) {
   // identical list output always means the same mail. An empty list is
   // silence, so a wake that lost the race to another reader stands down.
   const wake = async () => {
-    const unread = await beb(["list"]);
+    const unread = await beb(["list", "--unread", "--limit", "10"]);
     if (!unread || unread === lastWake) return;
     lastWake = unread;
     pi.sendMessage(

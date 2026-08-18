@@ -41,13 +41,13 @@ wake:
 
 ```
 [beb] mail waits:
-3  frontend
-4  ssh-ed25519 AAAA...
+3  now  deploy blocked   frontend
+4  12m  schema question  ssh-ed25519 AAAA...
 read with: beb read
 ```
 
 The lines are `beb list` output. The agent reads, replies, and names
-correspondents with the same four beb verbs every other beb user has;
+correspondents with the ordinary beb CLI;
 pi-beb adds no verbs and no tools. It never consumes mail either: the
 cursor moves only when the agent runs `beb read` itself, so anything
 pi ignores is still waiting later.
